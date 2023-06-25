@@ -1,0 +1,8 @@
+# Typesense node list cconfiguration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nodeslist
+  namespace: typesense
+data:
+  nodes: "typesense-0.ts.typesense.svc.cluster.local:8107:8108,typesense-1.ts.typesense.svc.cluster.local:8107:8108,typesense-2.ts.typesense.svc.cluster.local:8107:8108"

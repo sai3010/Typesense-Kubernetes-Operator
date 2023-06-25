@@ -1,0 +1,13 @@
+# This service is meant to route traffic to typesense
+apiVersion: v1
+kind: Service
+metadata:
+  name: typesense-svc
+  namespace: typesense
+spec:
+  selector:
+    app: typesense
+  ports:
+  - name: http
+    port: 8108
+    targetPort: typesense-http

@@ -1,0 +1,22 @@
+apiVersion: typesenseproject.org/v1
+kind: TypesenseOperator
+metadata:
+  name: type-operator
+spec:
+  replicas: 1
+  namespace: typesense
+  image: typesense/typesense:0.24.1
+  resources:
+    requests:
+      memory: 100Mi
+      cpu: "100m"
+    limits:
+      memory: 200Mi
+      cpu: "100m"
+  nodeSelector:
+    kubernetes.io/os: linux
+config:
+  password: "1234"
+  # storageClass: 
+  #   name: typesense-storage
+    # storage: 10Gi

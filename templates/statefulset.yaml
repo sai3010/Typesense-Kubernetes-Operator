@@ -1,0 +1,85 @@
+# Typesense statefulset configuration
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: typesense
+  namespace: typesense
+  labels:
+    service: typesense
+    app: typesense
+spec:
+  serviceName: ts
+  podManagementPolicy: Parallel
+  # NOTE: This is number of nodes that we want to run
+  # you may update this
+  replicas: 3
+  selector:
+    matchLabels:
+      service: typesense
+      app: typesense
+  template:
+    metadata:
+      labels:
+        service: typesense
+        app: typesense
+    spec:
+      securityContext:
+        fsGroup: 2000
+        runAsUser: 10000
+        runAsGroup: 3000
+        runAsNonRoot: true
+      terminationGracePeriodSeconds: 300
+      containers:
+      - name: typesense
+        # NOTE : you can update to the latest release
+        image: typesense/typesense:0.24.1
+        command:
+          - "/opt/typesense-server"
+          - "-d"
+          - "/usr/share/typesense/data"
+          - "-a"
+          - "password"
+          - "--api-port"
+          - "8108"
+          - "--peering-port"
+          - "8107"
+          - "--nodes"
+          - "/usr/share/typesense/nodes"
+        ports:
+        - containerPort: 8108
+          name: typesense-http
+        # NOTE: you can increase these resources
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: "64m"
+          limits:
+            memory: 256Mi
+            cpu: "512m"
+        volumeMounts:
+        - name: nodeslist
+          mountPath: /usr/share/typesense
+        - name: data
+          mountPath: /usr/share/typesense/data
+      volumes:
+        - name: nodeslist
+          configMap:
+            name: nodeslist
+            items:
+            - key: nodes
+              path: nodes
+        - name: data
+          emptyDir:
+            sizeLimit: 500Mi
+  # volumeClaimTemplates:
+  # - metadata:
+  #     name: data
+  #   spec:
+  #     accessModes:
+  #       - ReadWriteOnce
+  #     # NOTE: Make sure to update your storageClass depending on your provider
+  #     storageClassName: default
+  #     # NOTE: You can increase the storage size
+  #     resources:
+  #       requests:
+  #         storage: 10Gi
