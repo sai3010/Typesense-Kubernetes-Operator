@@ -48,7 +48,7 @@ def create_modify_namespace(core_obj: object,namespace='default') -> None:
             resp = core_obj.create_namespace(body=configuration)
             logging.info(f"Created namespace {resp.metadata.name} successfully")
         except ApiException as e:
-            logging.error(f"Kubernets Api Exception: {e.body} ")
+            logging.error(f"Kubernets Api Exception - Namespace: {e.body} ")
     except Exception as e:
         logging.error(f"Exception namespace: {e}")
         
@@ -88,7 +88,7 @@ def deploy_typesense_statefulset(apps_obj: object,spec: dict,update=False) -> No
             apps_obj.create_namespaced_stateful_set(
                 body=configuration, namespace=spec['namespace'])
     except ApiException as e:
-        logging.error(f"Kubernets Api Exception: {e.body} ")
+        logging.error(f"Kubernets Api Exception - Statefulset: {e.body} ")
     except Exception as e:
         logging.error(f"Exception statefulset: {e}")
         
@@ -111,7 +111,7 @@ def deploy_configmap(core_obj: object,replicas=None,namespace='default',update=F
         configuration['metadata']['namespace'] = namespace
         if replicas:
             for count in range(0,int(replicas)):
-                nodes.append(('typesense-{}.ts.typesense.svc.cluster.local:8107:8108').format(str(count)))
+                nodes.append(('typesense-{}.ts.{}.svc.cluster.local:8107:8108').format(str(count)),namespace)
             configuration['data']['nodes'] = ','.join(nodes) 
         if update:
             core_obj.patch_namespaced_config_map(body=configuration,namespace=namespace,name="nodeslist")
@@ -119,7 +119,7 @@ def deploy_configmap(core_obj: object,replicas=None,namespace='default',update=F
             core_obj.create_namespaced_config_map(body=configuration,namespace=namespace)
         logging.info(f"Created Configmap nodeslist successfully")
     except ApiException as e:
-        logging.error(f"Kubernets Api Exception: {e.body} ")
+        logging.error(f"Kubernets Api Exception - Configmap: {e.body} ")
     except Exception as e:
         logging.error(f"Exception configmap: {e}")
 
@@ -130,6 +130,9 @@ def deploy_service(core_obj: object,namespace='default') -> None:
         core_obj: kubernetes CoreV1Api object
     '''
     try:
+        '''
+        ----Deploy service---
+        '''
         service_path = os.path.join(
             os.path.dirname(__file__),
             'templates/service.yaml'
@@ -142,17 +145,21 @@ def deploy_service(core_obj: object,namespace='default') -> None:
 
         logging.info(f"Created Service {resp.metadata.name} successfully")
 
+        '''
+        ----Deploy headless service---
+        '''
         headless_service_path = os.path.join(
             os.path.dirname(__file__),
             'templates/headless-service.yaml'
         )
         with open(headless_service_path,'r') as _file:
             configuration = yaml.safe_load(_file)
+        configuration['metadata']['namespace'] = namespace
         resp = core_obj.create_namespaced_service(body=configuration,namespace=namespace)
 
         logging.info(f"Created Headless Service {resp.metadata.name} successfully")
     except ApiException as e:
-        logging.error(f"Kubernets Api Exception: {e.body} ")
+        logging.error(f"Kubernets Api Exception - Service: {e.body} ")
     except Exception as e:
         logging.error(f"Exception service: {e}")
 
@@ -165,6 +172,6 @@ def cleanup(core_obj: object,namespace='default') -> None:
     try:
         core_obj.delete_namespace(namespace)
     except ApiException as e:
-        logging.error(f"Kubernets Api Exception: {e.body} ")
+        logging.error(f"Kubernets Api Exception - Cleanup: {e.body} ")
     except Exception as e:
         logging.error(f"Exception Cleanup: {e}")
