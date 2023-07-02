@@ -25,7 +25,7 @@ spec:
       serviceAccountName: typesense-operator-sa
       containers:
       - name: typesense-operator
-        image: sai3010/typesense-operator:latest
+        image: sai3010/typesense-operator:1.0
         imagePullPolicy: Always
         resources:
           requests:
