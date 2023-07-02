@@ -108,6 +108,7 @@ def deploy_configmap(core_obj: object,replicas=None,namespace='default',update=F
         configuration = None
         with open(path,'r') as _file:
             configuration = yaml.safe_load(_file)
+        configuration['metadata']['namespace'] = namespace
         if replicas:
             for count in range(0,int(replicas)):
                 nodes.append(('typesense-{}.ts.typesense.svc.cluster.local:8107:8108').format(str(count)))
@@ -136,6 +137,7 @@ def deploy_service(core_obj: object,namespace='default') -> None:
         configuration = None
         with open(service_path,'r') as _file:
             configuration = yaml.safe_load(_file)
+        configuration['metadata']['namespace'] = namespace
         resp = core_obj.create_namespaced_service(body=configuration,namespace=namespace)
 
         logging.info(f"Created Service {resp.metadata.name} successfully")

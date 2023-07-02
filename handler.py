@@ -5,8 +5,7 @@ from deployment_utils import validate_spec,deploy_typesense_statefulset,create_m
 
 @kopf.on.login()
 def login_fn(**kwargs):
-    # return kopf.login_with_service_account(**kwargs) or kopf.login_with_kubeconfig(**kwargs)
-    return kopf.login_with_service_account(**kwargs)
+    return kopf.login_with_service_account(**kwargs) or kopf.login_with_kubeconfig(**kwargs)
 
 @kopf.on.create('TypesenseOperator')
 def create_fn(body, **kwargs):
@@ -20,12 +19,8 @@ def create_fn(body, **kwargs):
     except:
         logging.info("----Loading kube config----")
         config.load_kube_config()
-    _config = client.Configuration()
-    _config.verify_ssl = False
-    client.Configuration.set_default(_config)
     k8s_apps_v1 = client.AppsV1Api()
     k8s_core_v1 = client.CoreV1Api()
-    # config.load_kube_config()
     spec = validate_spec(kwargs)
     create_modify_namespace(k8s_core_v1,namespace=spec['namespace'])
     deploy_configmap(k8s_core_v1,replicas=spec['replicas'],namespace=spec['namespace'])
@@ -45,12 +40,8 @@ def update_fn(body, **kwargs):
     except:
         logging.info("----Loading kube config----")
         config.load_kube_config()
-    _config = client.Configuration()
-    _config.verify_ssl = False
-    client.Configuration.set_default(_config)
     k8s_apps_v1 = client.AppsV1Api()
     k8s_core_v1 = client.CoreV1Api()
-    
     spec = validate_spec(kwargs)
     deploy_configmap(k8s_core_v1,replicas=spec['replicas'],namespace=spec['namespace'],update=True)
     deploy_typesense_statefulset(k8s_apps_v1,spec,update=True)
@@ -68,9 +59,6 @@ def delete_fn(body, **kwargs):
     except:
         logging.info("----Loading kube config----")
         config.load_kube_config()
-    _config = client.Configuration()
-    _config.verify_ssl = False
-    client.Configuration.set_default(_config)
     k8s_core_v1 = client.CoreV1Api()
     spec = validate_spec(kwargs)
     cleanup(k8s_core_v1,spec['namespace'])
