@@ -1,3 +1,4 @@
+# Configuration of Typesense fed to the operator goes here
 apiVersion: typesenseproject.org/v1
 kind: TypesenseOperator
 metadata:
@@ -16,7 +17,4 @@ spec:
   nodeSelector:
     kubernetes.io/os: linux
 config:
-  password: "1234"
-  # storageClass: 
-  #   name: typesense-storage
-    # storage: 10Gi
+  password: "123456789"
