@@ -16,5 +16,8 @@ spec:
       cpu: "100m"
   nodeSelector:
     kubernetes.io/os: linux
+  # storageClass:
+  #   name: standard
+  #   size: "100Mi"
 config:
   password: "123456789"

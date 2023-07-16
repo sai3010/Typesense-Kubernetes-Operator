@@ -10,8 +10,6 @@ metadata:
 spec:
   serviceName: ts
   podManagementPolicy: Parallel
-  # NOTE: This is number of nodes that we want to run
-  # you may update this
   replicas: 3
   selector:
     matchLabels:
@@ -68,18 +66,3 @@ spec:
             items:
             - key: nodes
               path: nodes
-        - name: data
-          emptyDir:
-            sizeLimit: 500Mi
-  # volumeClaimTemplates:
-  # - metadata:
-  #     name: data
-  #   spec:
-  #     accessModes:
-  #       - ReadWriteOnce
-  #     # NOTE: Make sure to update your storageClass depending on your provider
-  #     storageClassName: default
-  #     # NOTE: You can increase the storage size
-  #     resources:
-  #       requests:
-  #         storage: 10Gi

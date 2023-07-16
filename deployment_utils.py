@@ -22,7 +22,12 @@ def validate_spec(op_spec: dict) -> dict:
         return_data['image'] =  spec.get('image','typesense/typesense')
         return_data['resources'] = spec.get('resources',None)
         return_data['nodeSelector'] = spec.get('nodeSelector',None)
-        return_data['replicas'] = spec.get('replicas',None)
+        return_data['replicas'] = spec.get('replicas',3)
+        if spec.get('storageClass'):
+            if not spec['storageClass'].get('name') or not spec['storageClass'].get('size'):
+                raise Exception('Missing storageClass name or size')
+            return_data['storageClassName'] = spec['storageClass']['name']
+            return_data['storage'] = spec['storageClass']['size']
 
     if config:
         return_data['password'] = config.get('password','297beb01dd21c')
@@ -49,8 +54,10 @@ def create_modify_namespace(core_obj: object,namespace='default') -> None:
             logging.info(f"Created namespace {resp.metadata.name} successfully")
         except ApiException as e:
             logging.error(f"Kubernets Api Exception - Namespace: {e.body} ")
+            raise Exception(f"Kubernets Api Exception - Namespace: {e.body}")
     except Exception as e:
         logging.error(f"Exception namespace: {e}")
+        raise Exception(f"Exception namespace: {e}")
         
 
 def deploy_typesense_statefulset(apps_obj: object,spec: dict,update=False) -> None:
@@ -67,8 +74,31 @@ def deploy_typesense_statefulset(apps_obj: object,spec: dict,update=False) -> No
         configuration = None
         with open(path,'r') as _file:
             configuration = yaml.safe_load(_file)
-        # configuration['spec']['volumeClaimTemplates'][0]['spec']['storageClassName'] = spec['storageClassName']
-        # configuration['spec']['volumeClaimTemplates'][0]['spec']['resources']['requests']['storage'] = spec['storage']
+        if spec.get('storageClassName'):
+            template = {
+              "volumeClaimTemplates": [
+                {
+                  "metadata": {
+                    "name": "data"
+                  },
+                  "spec": {
+                    "accessModes": [
+                      "ReadWriteOnce"
+                    ],
+                    "storageClassName": spec['storageClassName'],
+                    "resources": {
+                      "requests": {
+                        "storage": spec['storage']
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+            configuration['spec']['volumeClaimTemplates'] = template['volumeClaimTemplates']
+        else:
+            # Use empty dir mount
+            configuration['spec']['template']['spec']['volumes'].append({"name":"data","emptyDir":{"sizeLimit":"500Mi"}})
         configuration['metadata']['namespace'] = spec['namespace']
         if spec.get('resources'):
             configuration['spec']['template']['spec']['containers'][0]['resources'] = spec['resources']
@@ -89,8 +119,10 @@ def deploy_typesense_statefulset(apps_obj: object,spec: dict,update=False) -> No
                 body=configuration, namespace=spec['namespace'])
     except ApiException as e:
         logging.error(f"Kubernets Api Exception - Statefulset: {e.body} ")
+        raise Exception(f"Kubernets Api Exception - Statefulset: {e.body} ")
     except Exception as e:
         logging.error(f"Exception statefulset: {e}")
+        raise Exception(f"Exception statefulset: {e}")
         
 
 def deploy_configmap(core_obj: object,replicas=None,namespace='default',update=False) -> None:
@@ -111,7 +143,7 @@ def deploy_configmap(core_obj: object,replicas=None,namespace='default',update=F
         configuration['metadata']['namespace'] = namespace
         if replicas:
             for count in range(0,int(replicas)):
-                nodes.append(('typesense-{}.ts.{}.svc.cluster.local:8107:8108').format(str(count)),namespace)
+                nodes.append(('typesense-{}.ts.{}.svc.cluster.local:8107:8108').format(str(count),namespace))
             configuration['data']['nodes'] = ','.join(nodes) 
         if update:
             core_obj.patch_namespaced_config_map(body=configuration,namespace=namespace,name="nodeslist")
@@ -120,8 +152,10 @@ def deploy_configmap(core_obj: object,replicas=None,namespace='default',update=F
         logging.info(f"Created Configmap nodeslist successfully")
     except ApiException as e:
         logging.error(f"Kubernets Api Exception - Configmap: {e.body} ")
+        raise Exception(f"Kubernets Api Exception - Configmap: {e.body} ")
     except Exception as e:
         logging.error(f"Exception configmap: {e}")
+        raise Exception(f"Exception configmap: {e}")
 
 def deploy_service(core_obj: object,namespace='default') -> None:
     '''
@@ -160,8 +194,10 @@ def deploy_service(core_obj: object,namespace='default') -> None:
         logging.info(f"Created Headless Service {resp.metadata.name} successfully")
     except ApiException as e:
         logging.error(f"Kubernets Api Exception - Service: {e.body} ")
+        raise Exception(f"Kubernets Api Exception - Service: {e.body} ")
     except Exception as e:
         logging.error(f"Exception service: {e}")
+        raise Exception(f"Exception service: {e}")
 
 def cleanup(core_obj: object,namespace='default') -> None:
     '''
@@ -173,5 +209,7 @@ def cleanup(core_obj: object,namespace='default') -> None:
         core_obj.delete_namespace(namespace)
     except ApiException as e:
         logging.error(f"Kubernets Api Exception - Cleanup: {e.body} ")
+        raise Exception(f"Kubernets Api Exception - Cleanup: {e.body} ")
     except Exception as e:
         logging.error(f"Exception Cleanup: {e}")
+        raise Exception(f"Exception Cleanup: {e}")
