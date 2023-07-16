@@ -43,10 +43,11 @@ kubectl create -f operator-config.yaml
 - Sample configuration can be found in `operator-config.yaml`
 - All the configuration must be specified under `spec` or `config`
 - Supported configurations under `spec`
-    - `replicas` : Number of replicas of typesense. `default is 3`
-    - `namespace`: Namespace to be used for deployment. `default namespace is typesense`
-    - `image` : Typesense production ready docker image. List can be found [here](https://hub.docker.com/r/typesense/typesense). By `default latest tag` will be pulled
-    - `resources` : Resources for cpu and memory.
+    - `replicas` : Number of replicas of typesense. default is `3` <br>
+        **NOTE**: When the number of replicas are increased the operator automatically handles the peering connection between the replicas.
+    - `namespace`: Namespace to be used for deployment. default namespace is `typesense`
+    - `image` : Typesense production ready docker image. List can be found [here](https://hub.docker.com/r/typesense/typesense). By default `latest` tag will be pulled
+    - `resources` : Resources for cpu and memory.<br>
         defaults to below configuration:
         ```
         resources:
@@ -57,15 +58,18 @@ kubectl create -f operator-config.yaml
             memory: 256Mi
             cpu: "512m"
         ```
-    - `nodeSelector` : Node to which pod has to be scheduled
+    - `nodeSelector` : Node to which pod has to be scheduled. if not specified, it picks up the node with available resources
+    - `storageClass` : Provides a way to administor the storage. Create a storage class with the provider of your choice and add it to the operator config.<br>
+    Options available are `name` and `size`
+        - `name` : Name of the storageClass that the operator should consider for volume mount.
+        - `size` : Size of the volume to be allocated to each typesense replica.<br>
+        **NOTE**: Supports all [k8s Storageclass](https://kubernetes.io/docs/concepts/storage/storage-classes/).
 - Supported configurations under `config`
-    - `password` : Typesense authentication is done using a password.` defaults to password`
+    - `password` : Typesense authentication is done using a password. defaults to `297beb01dd21c`
     ## Deploying the configuration
     - `kubectl create -f operator-config.yaml`
     - To apply any changes made to the config
         - `kubectl apply -f operator-config.yaml`
-    ## NOTE
-    - Storace class is not yet supported, as of now typesense data will be temporarirly stored within the pod itself ,so taking a snaphot would be necessary
 # Cleanup
 - When you want to fully remove the cluster operator and associated definitions, you can run:
     ```
