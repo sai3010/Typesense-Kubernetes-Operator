@@ -100,6 +100,8 @@ def deploy_typesense_statefulset(apps_obj: object,spec: dict,update=False) -> No
             # Use empty dir mount
             configuration['spec']['template']['spec']['volumes'].append({"name":"data","emptyDir":{"sizeLimit":"500Mi"}})
         configuration['metadata']['namespace'] = spec['namespace']
+        if spec.get('image'):
+            configuration['spec']['template']['spec']['containers'][0]['image'] = spec['image']
         if spec.get('resources'):
             configuration['spec']['template']['spec']['containers'][0]['resources'] = spec['resources']
         if spec.get('nodeSelector'):
