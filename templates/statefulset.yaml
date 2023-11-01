@@ -46,6 +46,18 @@ spec:
         ports:
         - containerPort: 8108
           name: typesense-http
+        startupProbe:
+          httpGet:
+            path: /health
+            port: typesense-http
+          failureThreshold: 10
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: typesense-http
+          failureThreshold: 2
+          periodSeconds: 10
         # NOTE: you can increase these resources
         resources:
           requests:
