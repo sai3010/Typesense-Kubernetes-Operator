@@ -10,6 +10,7 @@ metadata:
 spec:
   serviceName: ts
   podManagementPolicy: Parallel
+  publishNotReadyAddresses: true
   replicas: 3
   selector:
     matchLabels:
@@ -30,7 +31,7 @@ spec:
       containers:
       - name: typesense
         # NOTE : you can update to the latest release
-        image: typesense/typesense:0.24.1
+        image: typesense/typesense:0.25.0
         command:
           - "/opt/typesense-server"
           - "-d"
@@ -46,6 +47,18 @@ spec:
         ports:
         - containerPort: 8108
           name: typesense-http
+        startupProbe:
+          httpGet:
+            path: /health
+            port: typesense-http
+          failureThreshold: 10
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: typesense-http
+          failureThreshold: 2
+          periodSeconds: 10
         # NOTE: you can increase these resources
         resources:
           requests:
