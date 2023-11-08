@@ -10,7 +10,6 @@ metadata:
 spec:
   serviceName: ts
   podManagementPolicy: Parallel
-  publishNotReadyAddresses: true
   replicas: 3
   selector:
     matchLabels:

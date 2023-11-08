@@ -5,6 +5,7 @@ metadata:
   name: ts
   namespace: typesense
 spec:
+  publishNotReadyAddresses: true
   clusterIP: None
   selector:
     app: typesense
