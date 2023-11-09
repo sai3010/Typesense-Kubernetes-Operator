@@ -3,6 +3,7 @@ apiVersion: typesenseproject.org/v1
 kind: TypesenseOperator
 metadata:
   name: type-operator
+  namespace: typesense-operator
 spec:
   replicas: 1
   namespace: typesense
