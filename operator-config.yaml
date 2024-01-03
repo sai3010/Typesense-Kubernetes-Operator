@@ -14,6 +14,7 @@ spec:
     limits:
       memory: 200Mi
       cpu: "100m"
+  host: typesense.example.org
   nodeSelector:
     kubernetes.io/os: linux
   # storageClass:
