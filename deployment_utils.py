@@ -29,6 +29,18 @@ def validate_spec(op_spec: dict) -> dict:
             return_data['storageClassName'] = spec['storageClass']['name']
             return_data['storage'] = spec['storageClass']['size']
 
+        if spec.get('startupProbe'):
+            if not spec['startupProbe'].get('failureThreshold') or not spec['startupProbe'].get('periodSeconds'):
+                raise Exception('Missing startupProbe properties. Required: failureThreshold, periodSeconds')            
+            return_data['startupProbe_failureThreshold'] = spec['startupProbe']['failureThreshold']
+            return_data['startupProbe_periodSeconds'] = spec['startupProbe']['periodSeconds']
+
+        if spec.get('livenessProbe'):
+            if not spec['livenessProbe'].get('failureThreshold') or not spec['livenessProbe'].get('periodSeconds'):
+                raise Exception('Missing livenessProbe properties. Required: failureThreshold, periodSeconds')            
+            return_data['livenessProbe_failureThreshold'] = spec['livenessProbe']['failureThreshold']
+            return_data['livenessProbe_periodSeconds'] = spec['livenessProbe']['periodSeconds']
+
     if config:
         return_data['password'] = config.get('password','297beb01dd21c')
     return return_data
@@ -110,6 +122,15 @@ def deploy_typesense_statefulset(apps_obj: object,spec: dict,update=False) -> No
             configuration['spec']['template']['spec']['containers'][0]['command'][4] = spec['password']
         if spec.get('replicas'):
             configuration['spec']['replicas'] = spec['replicas']
+
+        if spec.get('startupProbe_failureThreshold') and spec.get('startupProbe_periodSeconds'):            
+            configuration['spec']['template']['spec']['containers'][0]['startupProbe']['failureThreshold'] = spec['startupProbe_failureThreshold']
+            configuration['spec']['template']['spec']['containers'][0]['startupProbe']['periodSeconds'] = spec['startupProbe_periodSeconds']
+
+        if spec.get('livenessProbe_failureThreshold') and spec.get('livenessProbe_periodSeconds'):            
+            configuration['spec']['template']['spec']['containers'][0]['livenessProbe']['failureThreshold'] = spec['livenessProbe_failureThreshold']
+            configuration['spec']['template']['spec']['containers'][0]['livenessProbe']['periodSeconds'] = spec['livenessProbe_periodSeconds']
+        
         if update:
             configuration["spec"]["template"]["metadata"]["annotations"] = {
             "kubectl.kubernetes.io/restartedAt": datetime.datetime.utcnow().isoformat()

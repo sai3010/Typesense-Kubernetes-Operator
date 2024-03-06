@@ -6,7 +6,7 @@ metadata:
 spec:
   replicas: 1
   namespace: typesense
-  image: typesense/typesense:0.25.0
+  image: typesense/typesense:0.25.2
   resources:
     requests:
       memory: 100Mi
@@ -19,5 +19,11 @@ spec:
   # storageClass:
   #   name: standard
   #   size: "100Mi"
+  # startupProbe:
+  #  failureThreshold: 10
+  #  periodSeconds: 10
+  # livenessProbe:    
+  #  failureThreshold: 2
+  #  periodSeconds: 10
 config:
   password: "123456789"
