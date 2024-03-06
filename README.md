@@ -70,6 +70,18 @@ kubectl create -f operator-config.yaml
     - `kubectl create -f operator-config.yaml`
     - To apply any changes made to the config
         - `kubectl apply -f operator-config.yaml`
+
+# Upgrade
+- Before performing this upgrade process, it is recommended to:
+    - Test it out in a dev environment 
+    - Backup the Typesense data
+- The process of updating TKO is simple:
+    1. Watch for changes in the CRD file and apply those changes
+    2. Watch for changes in the RBAC file and apply those changes
+    3. Apply the new `operator.yaml` file
+    4. Once the new operator pod is up and running, re-apply the configuration of the your operator so that the changes (if any) are reflected.<br>
+        ```kubectl apply -f <your operator config file yaml>```
+
 # Cleanup
 - When you want to fully remove the cluster operator and associated definitions, you can run:
     ```
@@ -85,7 +97,8 @@ If you encounter any issues while using the operator, you can get help by:
 
 # Contributing
 You can contribute by:
-- Raising issues by opening Pull Requests
+- Raising an issue
+- Opening Pull Requests
 - Improving documentation
 
 # License
