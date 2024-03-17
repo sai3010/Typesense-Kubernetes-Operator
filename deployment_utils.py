@@ -1,4 +1,4 @@
-import os,yaml,logging,datetime
+import os,yaml,logging,datetime,json
 from kubernetes.client.exceptions import ApiException
 
 def validate_spec(op_spec: dict) -> dict:
@@ -65,8 +65,12 @@ def create_modify_namespace(core_obj: object,namespace='default') -> None:
             resp = core_obj.create_namespace(body=configuration)
             logging.info(f"Created namespace {resp.metadata.name} successfully")
         except ApiException as e:
-            logging.error(f"Kubernets Api Exception - Namespace: {e.body} ")
-            raise Exception(f"Kubernets Api Exception - Namespace: {e.body}")
+            e.body = json.loads(e.body)
+            if e.body['reason'] == "AlreadyExists":
+                logging.info(f"Namespace exists, Skipping namespace creation!")
+            else:
+                logging.error(f"Kubernets Api Exception - Namespace: {e.body} ")
+                raise Exception(f"Kubernets Api Exception - Namespace: {e.body}")
     except Exception as e:
         logging.error(f"Exception namespace: {e}")
         raise Exception(f"Exception namespace: {e}")
@@ -222,17 +226,28 @@ def deploy_service(core_obj: object,namespace='default') -> None:
         logging.error(f"Exception service: {e}")
         raise Exception(f"Exception service: {e}")
 
-def cleanup(core_obj: object,namespace='default') -> None:
+def cleanup(apps_obj: object,core_obj: object,namespace='default') -> None:
     '''
     Function to cleanup all resources
     Params:
         core_obj: kubernetes CoreV1Api object
     '''
     try:
-        core_obj.delete_namespace(namespace)
+        # Delete configmap
+        core_obj.delete_namespaced_config_map('nodeslist',namespace)
+        # Delete headless service
+        core_obj.delete_namespaced_service('ts',namespace)
+        # Delete service
+        core_obj.delete_namespaced_service('typesense-svc',namespace)
+        # Delete statefulset
+        apps_obj.delete_namespaced_stateful_set('typesense',namespace)
     except ApiException as e:
-        logging.error(f"Kubernets Api Exception - Cleanup: {e.body} ")
-        raise Exception(f"Kubernets Api Exception - Cleanup: {e.body} ")
+        e.body = json.loads(e.body)
+        if e.body['reason'] == "NotFound":
+            logging.info(f"Skipping Cleanup as {e.body['message']}")
+        else:
+            logging.error(f"Kubernets Api Exception - Cleanup: {e.body} ")
+            raise Exception(f"Kubernets Api Exception - Cleanup: {e.body} ")
     except Exception as e:
         logging.error(f"Exception Cleanup: {e}")
         raise Exception(f"Exception Cleanup: {e}")
