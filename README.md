@@ -64,6 +64,12 @@ kubectl create -f operator-config.yaml
         - `name` : Name of the storageClass that the operator should consider for volume mount.
         - `size` : Size of the volume to be allocated to each typesense replica.<br>
         **NOTE**: Supports all [k8s Storageclass](https://kubernetes.io/docs/concepts/storage/storage-classes/).
+    - `startupProbe` : Protect slow starting containers with startup probes <br>
+    Options available are `failureThreshold` and `periodSeconds` <br>
+    **NOTE**: [k8s startupProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes).
+    - `livenessProbe` :  Kubernetes provides liveness probes to detect and remedy such situations. <br>
+    Options available are `failureThreshold` and `periodSeconds`<br>
+    **NOTE**: [k8s livenessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request).
 - Supported configurations under `config`
     - `password` : Typesense authentication is done using a password. defaults to `297beb01dd21c`
     ## Deploying the configuration
