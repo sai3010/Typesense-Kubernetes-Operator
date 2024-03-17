@@ -60,6 +60,7 @@ def delete_fn(body, **kwargs):
         logging.info("----Loading kube config----")
         config.load_kube_config()
     k8s_core_v1 = client.CoreV1Api()
+    k8s_apps_v1 = client.AppsV1Api()
     spec = validate_spec(kwargs)
-    cleanup(k8s_core_v1,spec['namespace'])
+    cleanup(k8s_apps_v1,k8s_core_v1,spec['namespace'])
     logging.info(f"Typesense Operator cleaned successfully")
