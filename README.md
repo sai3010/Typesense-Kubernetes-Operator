@@ -5,7 +5,7 @@ It is currently being worked on to be made production ready.
 Please report an issue for improvement suggestions/feedback. This operator is being written with the help of [KOPF](https://github.com/nolar/kopf) framework.
 
 # Project Scope
-The general idea is to make deployment of Tyepsense on kubernetes easy by automating the entire process involved in creation of Typesense cluster 
+The general idea is to make deployment of Typesense on kubernetes easy by automating the entire process involved in creation of Typesense cluster
 ```
 kubectl create -f operator-config.yaml
 ```
