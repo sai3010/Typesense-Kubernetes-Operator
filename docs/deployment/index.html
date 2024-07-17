@@ -176,28 +176,32 @@
 </code></pre>
 <p><strong>Deploy RBAC (Role-Based Access Control)</strong></p>
 <ul>
-<li>Deploy RBAC configuration:
-   <code>kubectl create -f rbac.yaml</code></li>
+<li>Deploy RBAC configuration:</li>
 </ul>
+<pre><code>kubectl create -f rbac.yaml
+</code></pre>
 <p><strong>Deploy the Latest Operator</strong></p>
 <ul>
-<li>Deploy the latest Typesense Operator:
-   <code>kubectl create -f operator.yaml</code></li>
+<li>Deploy the latest Typesense Operator:</li>
 </ul>
+<pre><code>kubectl create -f operator.yaml
+</code></pre>
 <p><strong>Verify Operator Deployment</strong></p>
 <ul>
-<li>Check if the operator pods are up and running:
-   <code>kubectl get pods</code></li>
+<li>Check if the operator pods are up and running:</li>
 </ul>
+<pre><code>kubectl get pods
+</code></pre>
 <p><strong>Configure Operator</strong></p>
 <ul>
 <li>Once the operator is running, configure it by referring to the configuration section below.</li>
 </ul>
 <p><strong>Monitor Cluster Creation</strong></p>
 <ul>
-<li>Monitor the creation of the Typesense cluster by checking pod statuses:
-   <code>kubectl get pods -n &lt;namespace&gt;</code></li>
+<li>Monitor the creation of the Typesense cluster by checking pod statuses:</li>
 </ul>
+<pre><code>kubectl get pods -n &lt;namespace&gt;
+</code></pre>
 <hr />
 <h1 id="operator-configuration">Operator Configuration</h1>
 <hr />
@@ -254,14 +258,10 @@ Options available are <code>failureThreshold</code> and <code>periodSeconds</cod
 </ul>
 </li>
 <li>Deploying the configuration<ul>
-<li>Create the operator<ul>
-<li><code>kubectl create -f operator-config.yaml</code></li>
-</ul>
-</li>
-<li>To apply any changes made to the config<ul>
-<li><code>kubectl apply -f operator-config.yaml</code></li>
-</ul>
-</li>
+<li>Create the operator
+<code>kubectl create -f operator-config.yaml</code></li>
+<li>To apply any changes made to the config
+<code>kubectl apply -f operator-config.yaml</code></li>
 </ul>
 </li>
 </ul>

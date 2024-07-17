@@ -125,7 +125,23 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#version-160-2024-04-20" class="nav-link">Version 1.6.0 (2024-04-20)</a>
+            <li class="nav-item" data-bs-level="2"><a href="#version-20-2024-03-17-stable" class="nav-link">Version 2.0 (2024-03-17) (Stable)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#version-13-2023-12-08" class="nav-link">Version 1.3 (2023-12-08)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#version-12-2023-11-01" class="nav-link">Version 1.2 (2023-11-01)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#version-11-2023-07-16" class="nav-link">Version 1.1 (2023-07-16)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#version-10-2023-06-02" class="nav-link">Version 1.0 (2023-06-02)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -139,218 +155,60 @@
 <h1 id="release-notes">Release Notes</h1>
 <hr />
 <h2 id="maintenance-team">Maintenance team</h2>
-<p>The current and past members of the MkDocs team.</p>
 <ul>
 <li><a href="https://github.com/sai3010/">saiprasanth</a></li>
 </ul>
-<h2 id="version-160-2024-04-20">Version 1.6.0 (2024-04-20)</h2>
-<h3 id="local-preview">Local preview</h3>
+<h2 id="version-20-2024-03-17-stable">Version 2.0 (2024-03-17) (Stable)</h2>
 <ul>
-<li>
-<p><code>mkdocs serve</code> no longer locks up the browser when more than 5 tabs are open. This is achieved by closing the polling connection whenever a tab becomes inactive. Background tabs will no longer auto-reload either - that will instead happen as soon the tab is opened again. Context: #3391</p>
-</li>
-<li>
-<p>New flag <code>serve --open</code> to open the site in a browser.<br />
-    After the first build is finished, this flag will cause the default OS Web browser to be opened at the home page of the local site.<br />
-    Context: #3500</p>
-</li>
+<li>Docker Image: <a href="https://hub.docker.com/layers/sai3010/typesense-operator/2.0/images/sha256-49046efee0e9a868b822fa37f5bd50057eaf33ba240429ba8f2bb9e511ca1006?context=explore">2.0</a> </li>
+<li>For more information refer to <a href="https://github.com/sai3010/Typesense-Kubernetes-Operator/releases/tag/v2.0">Release Notes</a></li>
 </ul>
-<h4 id="drafts">Drafts</h4>
-<blockquote>
-<p>DANGER: <strong>Changed from version 1.5.</strong></p>
-</blockquote>
-<p><strong>The <code>exclude_docs</code> config was split up into two separate concepts.</strong></p>
-<p>The <code>exclude_docs</code> config no longer has any special behavior for <code>mkdocs serve</code> - it now always completely excludes the listed documents from the site.</p>
-<p>If you wish to use the "drafts" functionality like the <code>exclude_docs</code> key used to do in MkDocs 1.5, please switch to the <strong>new config key <code>draft_docs</code></strong>.</p>
-<p>See <a href="../user-guide/configuration.md#exclude_docs">documentation</a>.</p>
-<p>Other changes:</p>
+<h5 id="whats-new"><strong>What's New</strong></h5>
 <ul>
-<li>Reduce warning levels when a "draft" page has a link to a non-existent file. Context: #3449</li>
+<li>Start up probe from operator config</li>
+<li><strong>important</strong> Operator will now not delete the entire namespace.</li>
 </ul>
-<h3 id="update-to-deduction-of-page-titles">Update to deduction of page titles</h3>
-<p>MkDocs 1.5 had a change in behavior in deducing the page titles from the first heading. Unfortunately this could cause unescaped HTML tags or entities to appear in edge cases.</p>
-<p>Now tags are always fully sanitized from the title. Though it still remains the case that [<code>Page.title</code>][mkdocs.structure.pages.Page.title] is expected to contain HTML entities and is passed directly to the themes.</p>
-<p>Images (notably, emojis in some extensions) get preserved in the title only through their <code>alt</code> attribute's value.</p>
-<p>Context: #3564, #3578</p>
-<h3 id="themes">Themes</h3>
+<h2 id="version-13-2023-12-08">Version 1.3 (2023-12-08)</h2>
 <ul>
-<li>Built-in themes now also support Polish language (#3613)</li>
+<li>Docker Image: <a href="https://hub.docker.com/layers/sai3010/typesense-operator/1.3/images/sha256-220a7fa15ae6dc11196163056be5d60df3f61cdfed7b6df36c410afbfb48c2f1?context=explore">1.3</a> </li>
+<li>For more information refer to <a href="https://github.com/sai3010/Typesense-Kubernetes-Operator/releases/tag/v1.3">Release Notes</a></li>
 </ul>
-<h4 id="readthedocs-theme">"readthedocs" theme</h4>
+<h5 id="whats-new_1"><strong>What's New</strong></h5>
 <ul>
-<li>
-<p>Fix: "readthedocs" theme can now correctly handle deeply nested nav configurations (over 2 levels deep), without confusedly expanding all sections and jumping around vertically. (#3464)</p>
-</li>
-<li>
-<p>Fix: "readthedocs" theme now shows a link to the repository (with a generic logo) even when isn't one of the 3 known hosters. (#3435)</p>
-</li>
-<li>
-<p>"readthedocs" theme now also has translation for the word "theme" in the footer that mistakenly always remained in English. (#3613, #3625)</p>
-</li>
+<li>Statefulset does not support <code>publishNotReadyAddresses</code> option </li>
 </ul>
-<h4 id="mkdocs-theme">"mkdocs" theme</h4>
-<p>The "mkdocs" theme got a big update to a newer version of Bootstrap, meaning a slight overhaul of styles. Colors (most notably of admonitions) have much better contrast.</p>
-<p>The "mkdocs" theme now has support for dark mode - both automatic (based on the OS/browser setting) and with a manual toggle. Both of these options are <strong>not</strong> enabled by default and need to be configured explicitly.<br />
-See <code>color_mode</code>, <code>user_color_mode_toggle</code> in <a href="../user-guide/choosing-your-theme.md#mkdocs"><strong>documentation</strong></a>.</p>
-<blockquote>
-<p>WARNING: <strong>Possible breaking change.</strong></p>
-<p>jQuery is no longer included into the "mkdocs" theme. If you were relying on it in your scripts, you will need to separately add it first (into mkdocs.yml) as an extra script:</p>
-<p><code>yaml
-extra_javascript:
-  - https://code.jquery.com/jquery-3.7.1.min.js</code></p>
-<p>Or even better if the script file is copied and included from your docs dir.</p>
-</blockquote>
-<p>Context: #3493, #3649</p>
-<h3 id="configuration">Configuration</h3>
-<h4 id="new-enabled-setting-for-all-plugins">New "<code>enabled</code>" setting for all plugins</h4>
-<p>You may have seen some plugins take up the convention of having a setting <code>enabled: false</code> (or usually controlled through an environment variable) to make the plugin do nothing.</p>
-<p>Now <em>every</em> plugin has this setting. Plugins can still <em>choose</em> to implement this config themselves and decide how it behaves (and unless they drop older versions of MkDocs, they still should for now), but now there's always a fallback for every plugin.</p>
-<p>See <a href="../user-guide/configuration.md/#enabled-option"><strong>documentation</strong></a>. Context: #3395</p>
-<h3 id="validation">Validation</h3>
-<h4 id="validation-of-hyperlinks-between-pages">Validation of hyperlinks between pages</h4>
-<h5 id="absolute-links">Absolute links</h5>
-<blockquote>
-<p>Historically, within Markdown, MkDocs only recognized <strong>relative</strong> links that lead to another physical <code>*.md</code> document (or media file). This is a good convention to follow because then the source pages are also freely browsable without MkDocs, for example on GitHub. Whereas absolute links were left unmodified (making them often not work as expected or, more recently, warned against).</p>
-</blockquote>
-<p>If you dislike having to always use relative links, now you can opt into absolute links and have them work correctly.</p>
-<p>If you set the setting <code>validation.links.absolute_links</code> to the new value <code>relative_to_docs</code>, all Markdown links starting with <code>/</code> will be understood as being relative to the <code>docs_dir</code> root. The links will then be validated for correctness according to all the other rules that were already working for relative links in prior versions of MkDocs. For the HTML output, these links will still be turned relative so that the site still works reliably.</p>
-<p>So, now any document (e.g. "dir1/foo.md") can link to the document "dir2/bar.md" as <code>[link](/dir2/bar.md)</code>, in addition to the previously only correct way <code>[link](../dir2/bar.md)</code>.</p>
-<p>You have to enable the setting, though. The default is still to just skip any processing of such links.</p>
-<p>See <a href="../user-guide/configuration.md#validation-of-absolute-links"><strong>documentation</strong></a>. Context: #3485</p>
-<h6 id="absolute-links-within-nav">Absolute links within nav</h6>
-<p>Absolute links within the <code>nav:</code> config were also always skipped. It is now possible to also validate them in the same way with <code>validation.nav.absolute_links</code>. Though it makes a bit less sense because then the syntax is simply redundant with the syntax that comes without the leading slash.</p>
-<h5 id="anchors">Anchors</h5>
-<p>There is a new config setting that is recommended to enable warnings for:</p>
-<pre><code class="language-yaml">validation:
-  anchors: warn
-</code></pre>
-<p>Example of a warning that this can produce:</p>
-<pre><code class="language-text">WARNING -  Doc file 'foo/example.md' contains a link '../bar.md#some-heading', but the doc 'foo/bar.md' does not contain an anchor '#some-heading'.
-</code></pre>
-<p>Any of the below methods of declaring an anchor will be detected by MkDocs:</p>
-<pre><code class="language-markdown">## Heading producing an anchor
-
-## Another heading {#custom-anchor-for-heading-using-attr-list}
-
-&lt;a id=&quot;raw-anchor&quot;&gt;&lt;/a&gt;
-
-[](){#markdown-anchor-using-attr-list}
-</code></pre>
-<p>Plugins and extensions that insert anchors, in order to be compatible with this, need to be developed as treeprocessors that insert <code>etree</code> elements as their mode of operation, rather than raw HTML which is undetectable for this purpose.</p>
-<p>If you as a user are dealing with falsely reported missing anchors and there's no way to resolve this, you can choose to disable these messages by setting this option to <code>ignore</code> (and they are at INFO level by default anyway).</p>
-<p>See <a href="../user-guide/configuration.md#validation"><strong>documentation</strong></a>. Context: #3463</p>
-<p>Other changes:</p>
+<h2 id="version-12-2023-11-01">Version 1.2 (2023-11-01)</h2>
 <ul>
-<li>
-<p>When the <code>nav</code> config is not specified at all, the <code>not_in_nav</code> setting (originally added in 1.5.0) gains an additional behavior: documents covered by <code>not_in_nav</code> will not be part of the automatically deduced navigation. Context: #3443</p>
-</li>
-<li>
-<p>Fix: the <code>!relative</code> YAML tag for <code>markdown_extensions</code> (originally added in 1.5.0) - it was broken in many typical use cases.</p>
-<p>See <a href="../user-guide/configuration.md#paths-relative-to-the-current-file-or-site"><strong>documentation</strong></a>. Context: #3466</p>
-</li>
-<li>
-<p>Config validation now exits on first error, to avoid showing bizarre secondary errors. Context: #3437</p>
-</li>
-<li>
-<p>MkDocs used to shorten error messages for unexpected errors such as "file not found", but that is no longer the case, the full error message and stack trace will be possible to see (unless the error has a proper handler, of course). Context: #3445</p>
-</li>
+<li>Docker Image: <a href="https://hub.docker.com/layers/sai3010/typesense-operator/1.2/images/sha256-d2addf43f67b1b4c18582458ca88a4bd74f84856ec03f299e1083bc8c319a76a?context=explore">1.2</a> </li>
+<li>For more information refer to <a href="https://github.com/sai3010/Typesense-Kubernetes-Operator/releases/tag/v1.2">Release Notes</a></li>
 </ul>
-<h3 id="upgrades-for-plugin-developers">Upgrades for plugin developers</h3>
-<h4 id="plugins-can-add-multiple-handlers-for-the-same-event-type-at-multiple-priorities">Plugins can add multiple handlers for the same event type, at multiple priorities</h4>
-<p>See [<code>mkdocs.plugins.CombinedEvent</code>][] in <a href="../dev-guide/plugins.md#event-priorities"><strong>documentation</strong></a>. Context: #3448</p>
-<h4 id="enabling-true-generated-files-and-expanding-the-filemkdocsstructurefilesfile-api">Enabling true generated files and expanding the [<code>File</code>][mkdocs.structure.files.File] API</h4>
-<p>See [<strong>documentation</strong>][mkdocs.structure.files.File].</p>
+<h5 id="whats-new_2"><strong>What's New</strong></h5>
 <ul>
-<li>
-<p>There is a new pair of attributes [<code>File.content_string</code>][mkdocs.structure.files.File.content_string]/[<code>content_bytes</code>][mkdocs.structure.files.File.content_bytes] that becomes the official API for obtaining the content of a file and is used by MkDocs itself.</p>
-<p>This replaces the old approach where one had to manually read the file located at [<code>File.abs_src_path</code>][mkdocs.structure.files.File.abs_src_path], although that is still the primary action that these new attributes do under the hood.</p>
-</li>
-<li>
-<p>The content of a <code>File</code> can be backed by a string and no longer has to be a real existing file at <code>abs_src_path</code>.</p>
-<p>It is possible to <strong>set</strong> the attribute <code>File.content_string</code> or <code>File.content_bytes</code> and it will take precedence over <code>abs_src_path</code>.</p>
-<p>Further, <code>abs_src_path</code> is no longer guaranteed to be present and can be <code>None</code> instead. MkDocs itself still uses physical files in all cases, but eventually plugins will appear that don't populate this attribute.</p>
-</li>
-<li>
-<p>There is a new constructor [<code>File.generated()</code>][mkdocs.structure.files.File.generated] that should be used by plugins instead of the <code>File()</code> constructor. It is much more convenient because one doesn't need to manually look up the values such as <code>docs_dir</code> and <code>use_directory_urls</code>. Its signature is one of:</p>
-<p><code>python
-f = File.generated(config: MkDocsConfig, src_uri: str, content: str | bytes)
-f = File.generated(config: MkDocsConfig, src_uri: str, abs_src_path: str)</code></p>
-<p>This way, it is now extremely easy to add a virtual file even from a hook:</p>
-<p><code>python
-def on_files(files: Files, config: MkDocsConfig):
-    files.append(File.generated(config, 'fake/path.md', content="Hello, world!"))</code></p>
-<p>For large content it is still best to use physical files, but one no longer needs to manipulate the path by providing a fake unused <code>docs_dir</code>.</p>
-</li>
-<li>
-<p>There is a new attribute [<code>File.generated_by</code>][mkdocs.structure.files.File.generated_by] that arose by convention - for generated files it should be set to the name of the plugin (the key in the <code>plugins:</code> collection) that produced this file. This attribute is populated automatically when using the <code>File.generated()</code> constructor.</p>
-</li>
-<li>
-<p>It is possible to set the [<code>edit_uri</code>][mkdocs.structure.files.File.edit_uri] attribute of a <code>File</code>, for example from a plugin or hook, to make it different from the default (equal to <code>src_uri</code>), and this will be reflected in the edit link of the document. This can be useful because some pages aren't backed by a real file and are instead created dynamically from some other source file or script. So a hook could set the <code>edit_uri</code> to that source file or script accordingly.</p>
-</li>
-<li>
-<p>The <code>File</code> object now stores its original <code>src_dir</code>, <code>dest_dir</code>, <code>use_directory_urls</code> values as attributes.</p>
-</li>
-<li>
-<p>Fields of <code>File</code> are computed on demand but cached. Only the three above attributes are primary ones, and partly also [<code>dest_uri</code>][mkdocs.structure.files.File.dest_uri]. This way, it is possible to, for example, overwrite <code>dest_uri</code> of a <code>File</code>, and <code>abs_dest_path</code> will be calculated based on it. However you need to clear the attribute first using <code>del f.abs_dest_path</code>, because the values are cached.</p>
-</li>
-<li>
-<p><code>File</code> instances are now hashable (can be used as keys of a <code>dict</code>). Two files can no longer be considered "equal" unless it's the exact same instance of <code>File</code>.</p>
-</li>
+<li>Updating the Typesense image version from custom <code>operator-config.yaml</code></li>
+<li>The <code>publishNotReadyAddresses=True</code> is set to support headless services discovery in stateful sets</li>
+<li>Introducing liveness and startup probes.</li>
+<li>Base files updated to pull Typesense version <code>0.25.0</code></li>
 </ul>
-<p>Other changes:</p>
+<h2 id="version-11-2023-07-16">Version 1.1 (2023-07-16)</h2>
 <ul>
-<li>
-<p>The internal storage of <code>File</code> objects inside a <code>Files</code> object has been reworked, so any plugins that choose to access <code>Files._files</code> will get a deprecation warning.</p>
-</li>
-<li>
-<p>The order of <code>File</code> objects inside a <code>Files</code> collection is no longer significant when automatically inferring the <code>nav</code>. They get forcibly sorted according to the default alphabetic order.</p>
-</li>
+<li>Docker Image: <a href="https://hub.docker.com/layers/sai3010/typesense-operator/1.1/images/sha256-140ea04596042d841eebf801a5daba6a4bc0a8d71afec20adc0c75b18991ca72?context=explore">1.1</a> </li>
+<li>For more information refer to <a href="https://github.com/sai3010/Typesense-Kubernetes-Operator/releases/tag/v1.1">Release Notes</a></li>
 </ul>
-<p>Context: #3451, #3463</p>
-<h3 id="hooks-and-debugging">Hooks and debugging</h3>
+<h5 id="whats-new_3"><strong>What's New</strong></h5>
 <ul>
-<li>
-<p>Hook files can now import adjacent *.py files using the <code>import</code> statement. Previously this was possible to achieve only through a <code>sys.path</code> workaround. See the new mention in <a href="../user-guide/configuration.md#hooks">documentation</a>. Context: #3568</p>
-</li>
-<li>
-<p>Verbose <code>-v</code> log shows the sequence of plugin events in more detail - shows each invoked plugin one by one, not only the event type. Context: #3444</p>
-</li>
+<li>Added support for StorageClass</li>
 </ul>
-<h3 id="deprecations">Deprecations</h3>
+<h5 id="bug-fixes"><strong>Bug fixes</strong></h5>
 <ul>
-<li>
-<p>Python 3.7 is no longer supported, Python 3.12 is officially supported. Context: #3429</p>
-</li>
-<li>
-<p>The theme config file <code>mkdocs_theme.yml</code> no longer executes YAML tags. Context: #3465</p>
-</li>
-<li>
-<p>The plugin event <code>on_page_read_source</code> is soft-deprecated because there is always a better alternative to it (see the new <code>File</code> API or just <code>on_page_markdown</code>, depending on the desired interaction).</p>
-<p>When multiple plugins/hooks apply this event handler, they trample over each other, so now there is a warning in that case.</p>
-<p>See <a href="../dev-guide/plugins.md#on_page_read_source"><strong>documentation</strong></a>. Context: #3503</p>
-</li>
+<li>Configmap creation fixed</li>
+<li>Exceptions are not bypassed. If any exceptions are raised, the operator does not create resources further.</li>
 </ul>
-<h4 id="api-deprecations">API deprecations</h4>
+<h2 id="version-10-2023-06-02">Version 1.0 (2023-06-02)</h2>
 <ul>
-<li>
-<p>It is no longer allowed to set <code>File.page</code> to a type other than <code>Page</code> or a subclass thereof. Context: #3443 - following the deprecation in version 1.5.3 and #3381.</p>
-</li>
-<li>
-<p><code>Theme._vars</code> is deprecated - use <code>theme['foo']</code> instead of <code>theme._vars['foo']</code></p>
-</li>
-<li>
-<p><code>utils</code>: <code>modified_time()</code>, <code>get_html_path()</code>, <code>get_url_path()</code>, <code>is_html_file()</code>, <code>is_template_file()</code> are removed. <code>path_to_url()</code> is deprecated.</p>
-</li>
-<li>
-<p><code>LiveReloadServer.watch()</code> no longer accepts a custom callback.</p>
-</li>
-</ul>
-<p>Context: #3429</p>
-<h3 id="misc">Misc</h3>
-<ul>
-<li>The <code>sitemap.xml.gz</code> file is slightly more reproducible and no longer changes on every build, but instead only once per day (upon a date change). Context: #3460</li>
-</ul>
-<p>Other small improvements; see <a href="https://github.com/mkdocs/mkdocs/compare/1.5.3...1.6.0">commit log</a></p></div>
+<li>Initial public release</li>
+<li>Docker Image: <a href="https://hub.docker.com/layers/sai3010/typesense-operator/1.0/images/sha256-334af6211fe6dd4a59ad01d61628a754a7204bf372f538e10a60e0300d1b286d?context=explore">1.0</a> </li>
+<li>For more information refer to <a href="https://github.com/sai3010/Typesense-Kubernetes-Operator/releases/tag/v1.0">Release Notes</a></li>
+</ul></div>
             </div>
         </div>
 
