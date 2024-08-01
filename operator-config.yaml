@@ -32,4 +32,5 @@ spec:
   #  failureThreshold: 2
   #  periodSeconds: 10
 config:
+  # Name of the secret
   secret: "typesense-apikey"

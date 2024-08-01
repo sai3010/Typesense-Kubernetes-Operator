@@ -46,7 +46,7 @@ def validate_spec(op_spec: dict, k8s_core_v1=None) -> dict:
         Get APIKEY from secret
         '''
         secret_name = config.get('secret','typesense-apikey')
-        secret = k8s_core_v1.read_namespaced_secret(name=secret_name)
+        secret = k8s_core_v1.read_namespaced_secret(name=secret_name,namespace=return_data['namespace'])
         secret_data = secret.data
         if not secret_data:
             raise Exception("Secret for APIKey not found")
