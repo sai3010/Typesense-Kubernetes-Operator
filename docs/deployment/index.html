@@ -188,6 +188,13 @@
 </ul>
 <pre><code>kubectl create -f rbac.yaml
 </code></pre>
+<p><strong>Create secret for apikey used by Typesense</strong></p>
+<ul>
+<li>Make sure to deploy the secret in the same namespace as the operator:</li>
+<li>NOTE: do not change key <code>apikey</code> as it is used by operator to identify the value.</li>
+</ul>
+<pre><code>kubectl create secret generic -n &lt;namespace&gt; typesense-apikey --from-literal=apikey=MWYyZDFlMmU2N2Rm
+</code></pre>
 <p><strong>Deploy the Latest Operator</strong></p>
 <ul>
 <li>Deploy the latest Typesense Operator:</li>
@@ -258,9 +265,8 @@ Options available are <code>failureThreshold</code> and <code>periodSeconds</cod
 </ul>
 </li>
 <li>Supported configurations under <code>config</code><ul>
-<li><code>password</code> : Typesense authentication is done using a password. <ul>
-<li><strong>default</strong> : <code>297beb01dd21c</code> <br>
-<strong>NOTE</strong> : This will be moved to Kubernetes secrets in the upcoming versions!</li>
+<li><code>secret</code> : Typesense authentication is done using a password which is stored as secret. Provide the name of the secret here.<ul>
+<li><strong>default</strong> : No default value <br></li>
 </ul>
 </li>
 </ul>

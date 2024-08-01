@@ -7,6 +7,12 @@ spec:
   replicas: 1
   namespace: typesense
   image: typesense/typesense:0.25.2
+  env:
+  - name: APIKEY
+    valueFrom:
+      secretKeyRef:
+        name: typesense-apikey
+        key: apikey
   resources:
     requests:
       memory: 100Mi
@@ -26,4 +32,5 @@ spec:
   #  failureThreshold: 2
   #  periodSeconds: 10
 config:
-  password: "123456789"
+  # Name of the secret
+  secret: "typesense-apikey"
