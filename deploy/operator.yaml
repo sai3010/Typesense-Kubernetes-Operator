@@ -5,7 +5,7 @@ metadata:
   labels:
     app: typesense-operator
   name: typesense-operator
-  namespace: default
+  namespace: typesense-operator
 spec:
   replicas: 1
   selector:
