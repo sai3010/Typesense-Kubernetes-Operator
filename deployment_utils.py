@@ -126,24 +126,33 @@ def deploy_typesense_statefulset(apps_obj: object,spec: dict,update=False) -> No
             # Use empty dir mount
             configuration['spec']['template']['spec']['volumes'].append({"name":"data","emptyDir":{"sizeLimit":"500Mi"}})
         configuration['metadata']['namespace'] = spec['namespace']
+        
+        # Determine the current index for the Typesense container.
+        typesense_container_index = 0
+        for index, container in enumerate(configuration['spec']['template']['spec']['containers']):
+            if container['name'] == 'typesense':
+                typesense_container_index = index
+        
+        logging.info(f"Using the index {typesense_container_index} to access the typesense container.")
+
         if spec.get('image'):
-            configuration['spec']['template']['spec']['containers'][0]['image'] = spec['image']
+            configuration['spec']['template']['spec']['containers'][typesense_container_index]['image'] = spec['image']
         if spec.get('resources'):
-            configuration['spec']['template']['spec']['containers'][0]['resources'] = spec['resources']
+            configuration['spec']['template']['spec']['containers'][typesense_container_index]['resources'] = spec['resources']
         if spec.get('nodeSelector'):
             configuration['spec']['template']['spec']['nodeSelector'] = spec['nodeSelector']
         if spec.get('password'):
-            configuration['spec']['template']['spec']['containers'][0]['command'][4] = spec['password']
+            configuration['spec']['template']['spec']['containers'][typesense_container_index]['command'][4] = spec['password']
         if spec.get('replicas'):
             configuration['spec']['replicas'] = spec['replicas']
 
         if spec.get('startupProbe_failureThreshold') and spec.get('startupProbe_periodSeconds'):            
-            configuration['spec']['template']['spec']['containers'][0]['startupProbe']['failureThreshold'] = spec['startupProbe_failureThreshold']
-            configuration['spec']['template']['spec']['containers'][0]['startupProbe']['periodSeconds'] = spec['startupProbe_periodSeconds']
+            configuration['spec']['template']['spec']['containers'][typesense_container_index]['startupProbe']['failureThreshold'] = spec['startupProbe_failureThreshold']
+            configuration['spec']['template']['spec']['containers'][typesense_container_index]['startupProbe']['periodSeconds'] = spec['startupProbe_periodSeconds']
 
         if spec.get('livenessProbe_failureThreshold') and spec.get('livenessProbe_periodSeconds'):            
-            configuration['spec']['template']['spec']['containers'][0]['livenessProbe']['failureThreshold'] = spec['livenessProbe_failureThreshold']
-            configuration['spec']['template']['spec']['containers'][0]['livenessProbe']['periodSeconds'] = spec['livenessProbe_periodSeconds']
+            configuration['spec']['template']['spec']['containers'][typesense_container_index]['livenessProbe']['failureThreshold'] = spec['livenessProbe_failureThreshold']
+            configuration['spec']['template']['spec']['containers'][typesense_container_index]['livenessProbe']['periodSeconds'] = spec['livenessProbe_periodSeconds']
         
         if update:
             configuration["spec"]["template"]["metadata"]["annotations"] = {
