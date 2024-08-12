@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="TOK Team">
+        <link rel="canonical" href="https://github.com/sai3010/Typesense-Kubernetes-Operator/deployment/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Deployment - Typesense Operator</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-3N77GWHDWE"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', "G-3N77GWHDWE");
+        </script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Typesense Operator</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Deployment</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../about/community/" class="dropdown-item">Community</a>
+</li>
+                                    
+<li>
+    <a href="../about/release-notes/" class="dropdown-item">Release Notes</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" class="nav-link disabled">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../about/community/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/sai3010/Typesense-Kubernetes-Operator/docs/deployment.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                <span class="d-lg-none ms-2">Toggle theme</span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="fa-solid fa-sun fa-fw"></i>
+                                    <span class="ms-2">Light</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="fa-solid fa-moon fa-fw"></i>
+                                    <span class="ms-2">Dark</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                    <span class="ms-2">Auto</span>
+                                    <i class="fa-solid fa-check ms-auto"></i>
+                                  </button>
+                                </li>
+                              </ul>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script src="../js/darkmode.js"></script>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#quickstart-typesense-operator-installation" class="nav-link">Quickstart: Typesense Operator Installation</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#requirements" class="nav-link">Requirements</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#installation-steps" class="nav-link">Installation Steps</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#operator-configuration" class="nav-link">Operator Configuration</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#upgrade" class="nav-link">Upgrade</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#cleanup" class="nav-link">Cleanup</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="quickstart-typesense-operator-installation">Quickstart: Typesense Operator Installation</h1>
+<hr />
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>Typesense Operator v2.0 requires Kubernetes 1.20 or later.</li>
+<li>Works on self-managed and cloud managed clusters</li>
+</ul>
+<h2 id="installation-steps">Installation Steps</h2>
+<p><strong>Set Up Kubernetes Cluster</strong></p>
+<ul>
+<li>Use <a href="https://kubernetes.io/docs/tasks/tools/install-minikube/">minikube</a> or any other tool to create your Kubernetes cluster.</li>
+</ul>
+<p><strong>Deploy Custom Resource Definition</strong></p>
+<ul>
+<li>Navigate to the deployment directory</li>
+</ul>
+<pre><code>cd deploy
+</code></pre>
+<ul>
+<li>Deploy the Custom Resource Definition</li>
+</ul>
+<pre><code>kubectl create -f crd.yaml
+</code></pre>
+<p><strong>Deploy RBAC (Role-Based Access Control)</strong></p>
+<ul>
+<li>Deploy RBAC configuration:</li>
+</ul>
+<pre><code>kubectl create -f rbac.yaml
+</code></pre>
+<p><strong>Create secret for apikey used by Typesense</strong></p>
+<ul>
+<li>Make sure to deploy the secret in the same namespace as the operator:</li>
+<li>NOTE: do not change key <code>apikey</code> as it is used by operator to identify the value.</li>
+</ul>
+<pre><code>kubectl create secret generic -n &lt;namespace&gt; typesense-apikey --from-literal=apikey=MWYyZDFlMmU2N2Rm
+</code></pre>
+<p><strong>Deploy the Latest Operator</strong></p>
+<ul>
+<li>Deploy the latest Typesense Operator:</li>
+</ul>
+<pre><code>kubectl create -f operator.yaml
+</code></pre>
+<p><strong>Verify Operator Deployment</strong></p>
+<ul>
+<li>Check if the operator pods are up and running:</li>
+</ul>
+<pre><code>kubectl get pods
+</code></pre>
+<p><strong>Configure Operator</strong></p>
+<ul>
+<li>Once the operator is running, configure it by referring to the configuration section below.</li>
+</ul>
+<p><strong>Monitor Cluster Creation</strong></p>
+<ul>
+<li>Monitor the creation of the Typesense cluster by checking pod statuses:</li>
+</ul>
+<pre><code>kubectl get pods -n &lt;namespace&gt;
+</code></pre>
+<hr />
+<h1 id="operator-configuration">Operator Configuration</h1>
+<hr />
+<ul>
+<li>Sample configuration can be found in <a href="https://github.com/sai3010/Typesense-Kubernetes-Operator/blob/main/operator-config.yaml">operator-config.yaml</a></li>
+<li>All the configuration must be specified under <code>spec</code> or <code>config</code></li>
+<li>Supported configurations under <code>spec</code><ul>
+<li><code>replicas</code> : Number of replicas of typesense. <br><ul>
+<li><strong>default</strong> : <code>3</code>  <br>
+<strong>NOTE</strong>: When the number of replicas are increased the operator automatically handles the peering connection between the replicas.</li>
+</ul>
+</li>
+<li><code>namespace</code>: Namespace to be used for deployment. <br><ul>
+<li><strong>default</strong> : <code>typesense</code>  </li>
+</ul>
+</li>
+<li><code>image</code> : Typesense production ready docker image. List can be found <a href="https://hub.docker.com/r/typesense/typesense">here</a>. <ul>
+<li><strong>default</strong> : <code>latest</code> tag will be pulled</li>
+</ul>
+</li>
+<li><code>resources</code> : Resources for cpu and memory.<br><ul>
+<li><strong>default</strong> <br>
+<code>resources:
+  requests:
+    memory: 100Mi
+    cpu: "64m"
+  limits:
+    memory: 256Mi
+    cpu: "512m"</code></li>
+</ul>
+</li>
+<li><code>nodeSelector</code> : Node to which pod has to be scheduled. if not specified, it picks up the node with available resources</li>
+<li><code>storageClass</code> : Provides a way to administor the storage. Create a storage class with the provider of your choice and add it to the operator config.<br>
+Options available are <code>name</code> and <code>size</code><ul>
+<li><code>name</code> : Name of the storageClass that the operator should consider for volume mount.</li>
+<li><code>size</code> : Size of the volume to be allocated to each typesense replica.<br>
+<strong>NOTE</strong>: Supports all <a href="https://kubernetes.io/docs/concepts/storage/storage-classes/">k8s Storageclass</a>.</li>
+</ul>
+</li>
+<li><code>startupProbe</code> : Protect slow starting containers with startup probes <br>
+Options available are <code>failureThreshold</code> and <code>periodSeconds</code> <br>
+<strong>NOTE</strong>: <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes">k8s startupProbe</a>.</li>
+<li><code>livenessProbe</code> :  Kubernetes provides liveness probes to detect and remedy such situations. <br>
+Options available are <code>failureThreshold</code> and <code>periodSeconds</code><br>
+<strong>NOTE</strong>: <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request">k8s livenessProbe</a>.</li>
+</ul>
+</li>
+<li>Supported configurations under <code>config</code><ul>
+<li><code>secret</code> : Typesense authentication is done using a password which is stored as secret. Provide the name of the secret here.<ul>
+<li><strong>default</strong> : No default value <br></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Deploying the configuration<ul>
+<li>Create the operator
+<code>kubectl create -f operator-config.yaml</code></li>
+<li>To apply any changes made to the config
+<code>kubectl apply -f operator-config.yaml</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h1 id="upgrade">Upgrade</h1>
+<hr />
+<ul>
+<li>Before performing this upgrade process, it is recommended to<ul>
+<li>Test it out in a <code>dev</code> environment</li>
+<li>Backup the Typesense data</li>
+</ul>
+</li>
+<li>The process of updating TKO is simple<ol>
+<li>Watch for changes in the <a href="https://github.com/sai3010/Typesense-Kubernetes-Operator/blob/main/deploy/crd.yaml">CRD</a> file and apply those changes</li>
+<li>Watch for changes in the <a href="https://github.com/sai3010/Typesense-Kubernetes-Operator/blob/main/deploy/rbac.yaml">RBAC</a> file and apply those changes</li>
+<li>Apply the new <a href="https://github.com/sai3010/Typesense-Kubernetes-Operator/blob/main/deploy/operator.yaml">operator.yaml</a> file</li>
+<li>Once the new operator pod is up and running, re-apply the configuration of the your operator so that the changes (if any) are reflected.<br>
+    <code>kubectl apply -f &lt;your operator config file yaml&gt;</code></li>
+</ol>
+</li>
+</ul>
+<hr />
+<h1 id="cleanup">Cleanup</h1>
+<hr />
+<ul>
+<li>When you want to fully remove the cluster operator and associated definitions, you can run <br>
+    <code>kubectl delete -f operator-config.yaml</code> <br>
+    <code>kubectl delete -f deploy/crd.yaml</code> <br>
+    <code>kubectl delete -f deploy/operator.yaml</code> <br>
+    <code>kubectl delete -f deploy/rbac.yaml</code></li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
