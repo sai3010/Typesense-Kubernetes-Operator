@@ -180,13 +180,13 @@
 <ul>
 <li>Deploy the Custom Resource Definition</li>
 </ul>
-<pre><code>kubectl create -f crd.yaml
+<pre><code>kubectl create -f crd.yaml -n &lt;namespace&gt;
 </code></pre>
 <p><strong>Deploy RBAC (Role-Based Access Control)</strong></p>
 <ul>
 <li>Deploy RBAC configuration:</li>
 </ul>
-<pre><code>kubectl create -f rbac.yaml
+<pre><code>kubectl create -f rbac.yaml -n &lt;namespace&gt;
 </code></pre>
 <p><strong>Create secret for apikey used by Typesense</strong></p>
 <ul>
@@ -199,24 +199,18 @@
 <ul>
 <li>Deploy the latest Typesense Operator:</li>
 </ul>
-<pre><code>kubectl create -f operator.yaml
+<pre><code>kubectl create -f operator.yaml -n &lt;namespace&gt;
 </code></pre>
 <p><strong>Verify Operator Deployment</strong></p>
 <ul>
 <li>Check if the operator pods are up and running:</li>
 </ul>
-<pre><code>kubectl get pods
+<pre><code>kubectl get pods -n &lt;namespace&gt;
 </code></pre>
 <p><strong>Configure Operator</strong></p>
 <ul>
 <li>Once the operator is running, configure it by referring to the configuration section below.</li>
 </ul>
-<p><strong>Monitor Cluster Creation</strong></p>
-<ul>
-<li>Monitor the creation of the Typesense cluster by checking pod statuses:</li>
-</ul>
-<pre><code>kubectl get pods -n &lt;namespace&gt;
-</code></pre>
 <hr />
 <h1 id="operator-configuration">Operator Configuration</h1>
 <hr />
@@ -271,14 +265,22 @@ Options available are <code>failureThreshold</code> and <code>periodSeconds</cod
 </li>
 </ul>
 </li>
-<li>Deploying the configuration<ul>
+<li>
+<p>Deploying the configuration</p>
+<ul>
 <li>Create the operator
 <code>kubectl create -f operator-config.yaml</code></li>
 <li>To apply any changes made to the config
-<code>kubectl apply -f operator-config.yaml</code></li>
+<code>kubectl apply -f operator-config.yaml</code>
+<strong>Monitor Cluster Creation</strong></li>
 </ul>
 </li>
+<li>
+<p>Monitor the creation of the Typesense cluster by checking pod statuses:</p>
+</li>
 </ul>
+<pre><code>kubectl get pods -n &lt;namespace&gt;
+</code></pre>
 <hr />
 <h1 id="upgrade">Upgrade</h1>
 <hr />
