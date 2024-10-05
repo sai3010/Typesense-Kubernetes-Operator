@@ -1,7 +1,7 @@
 import os,yaml,logging,datetime,json,base64
 from kubernetes.client.exceptions import ApiException
 
-def validate_spec(op_spec: dict, k8s_core_v1=None) -> dict:
+def validate_spec(op_spec: dict, k8s_core_v1=None, action=None) -> dict:
     '''
     Function to validate the deployment yaml spec
     Param:
@@ -41,7 +41,7 @@ def validate_spec(op_spec: dict, k8s_core_v1=None) -> dict:
             return_data['livenessProbe_failureThreshold'] = spec['livenessProbe']['failureThreshold']
             return_data['livenessProbe_periodSeconds'] = spec['livenessProbe']['periodSeconds']
 
-    if config:
+    if config and action!='delete':
         '''
         Get APIKEY from secret
         '''
