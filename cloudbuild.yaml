@@ -1,0 +1,53 @@
+timeout: 3600s
+
+substitutions:
+  _USE_CACHE: "false"
+  _IMAGE_TAG: latest
+  _NAME: "gcp"
+  _REPO_NAME: "images"
+
+options:
+  machineType: N1_HIGHCPU_8
+
+tags:
+  - gcp-typesense-operator-image
+  
+###
+# Images to be pushed
+###
+images: [
+    # typesense-operator
+    'us-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_NAME}-typesense-operator:${_IMAGE_TAG}',
+    'us-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_NAME}-typesense-operator:latest',
+]
+
+steps:
+###
+# Builds the image used to run the deployment
+###
+- name: 'gcr.io/cloud-builders/docker'
+  id: typesense-operator-pull
+  entrypoint: 'bash'
+  args: ["-c", "if [[ '${_USE_CACHE}' == 'true' ]]; then (docker pull us-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_NAME}-typesense-operator:latest || exit 0); fi"]
+  waitFor: ["-"]
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: typesense-operator
+  args: [
+            'build',
+            '-t', 'us-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_NAME}-typesense-operator:${_IMAGE_TAG}',
+            '--cache-from', 'us-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_NAME}-typesense-operator:latest',
+            '.'
+        ]
+  waitFor:
+    - typesense-operator-pull
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: typesense-operator-tags
+  args: [
+            'tag',
+            'us-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_NAME}-typesense-operator:${_IMAGE_TAG}',
+            'us-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_NAME}-typesense-operator:latest',
+        ]
+  waitFor:
+    - typesense-operator
