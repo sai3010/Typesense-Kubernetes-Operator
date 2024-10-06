@@ -53,6 +53,13 @@ def validate_spec(op_spec: dict, k8s_core_v1=None, action=None) -> dict:
         # Decode the base64 encoded secret data
         for key, value in secret_data.items():
             return_data['password'] = base64.b64decode(value).decode('utf-8')
+        
+        '''
+        Prepare Typesense ENV
+        '''
+        typesense_env = config.get('env',None)
+        if typesense_env:
+            return_data['env'] = typesense_env
     return return_data
 
 def create_modify_namespace(core_obj: object,namespace='default') -> None:
@@ -154,6 +161,11 @@ def deploy_typesense_statefulset(apps_obj: object,spec: dict,update=False) -> No
             configuration['spec']['template']['spec']['containers'][typesense_container_index]['livenessProbe']['failureThreshold'] = spec['livenessProbe_failureThreshold']
             configuration['spec']['template']['spec']['containers'][typesense_container_index]['livenessProbe']['periodSeconds'] = spec['livenessProbe_periodSeconds']
         
+        for name,value in spec.get('env',{}).items():
+            if 'env' not in configuration['spec']['template']['spec']['containers'][typesense_container_index]:
+                configuration['spec']['template']['spec']['containers'][typesense_container_index]['env'] = []
+            configuration['spec']['template']['spec']['containers'][typesense_container_index]['env'].append({'name': name, 'value': value})
+        
         if update:
             configuration["spec"]["template"]["metadata"]["annotations"] = {
             "kubectl.kubernetes.io/restartedAt": datetime.datetime.utcnow().isoformat()
@@ -197,8 +209,12 @@ def deploy_configmap(core_obj: object,replicas=None,namespace='default',update=F
             core_obj.create_namespaced_config_map(body=configuration,namespace=namespace)
         logging.info(f"Created Configmap nodeslist successfully")
     except ApiException as e:
-        logging.error(f"Kubernets Api Exception - Configmap: {e.body} ")
-        raise Exception(f"Kubernets Api Exception - Configmap: {e.body} ")
+        e.body = json.loads(e.body)
+        if e.body['reason'] == "AlreadyExists":
+            logging.info(f"Configmap exists, Skipping Configmap creation!")
+        else:
+            logging.error(f"Kubernets Api Exception - Configmap: {e.body} ")
+            raise Exception(f"Kubernets Api Exception - Configmap: {e.body} ")
     except Exception as e:
         logging.error(f"Exception configmap: {e}")
         raise Exception(f"Exception configmap: {e}")

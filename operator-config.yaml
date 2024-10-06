@@ -34,3 +34,7 @@ spec:
 config:
   # Name of the secret
   secret: "typesense-apikey"
+  # Define all environment variables here.
+  # NOTE: This will add / override existing env variables defined as default for the operator
+  env:
+    TYPESENSE_ENABLE_CORS: "true"
