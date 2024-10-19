@@ -1,0 +1,3 @@
+kopf==1.37.2
+kubernetes==31.0.0
+pyyaml==6.0.2
