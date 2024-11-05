@@ -142,6 +142,10 @@
             
             <li class="nav-item" data-bs-level="1"><a href="#operator-configuration" class="nav-link">Operator Configuration</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#operator-metrics" class="nav-link">Operator metrics</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
             
@@ -286,6 +290,33 @@ Options available are <code>failureThreshold</code> and <code>periodSeconds</cod
 </ul>
 <pre><code>kubectl get pods -n &lt;namespace&gt;
 </code></pre>
+<h2 id="operator-metrics">Operator metrics</h2>
+<ul>
+<li>Operator exposes the following Prometheus metrics to periodically poll this endpoint and export the data into Prometheus</li>
+</ul>
+<table>
+    <tr>
+        <td><b>Metrics</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>tok_resource_create_success_total</td>
+        <td>Total number of successful resource creation events by the operator</td>
+    </tr>
+    <tr>
+        <td>tok_resource_update_success_total</td>
+        <td>Total number of updates to the resource by the operator</td>
+    </tr>
+    <tr>
+        <td>tok_resource_delete_success_total</td>
+        <td>Total number of deletion events by the operator</td>
+    </tr>
+    <tr>
+        <td>tok_version_info</td>
+        <td>Idicates the operator version that is currently deployed</td>
+    </tr>
+</table>
+
 <hr />
 <h1 id="upgrade">Upgrade</h1>
 <hr />
