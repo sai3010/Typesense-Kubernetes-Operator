@@ -27,7 +27,7 @@ rules:
     resources: [customresourcedefinitions]
     verbs: [list, watch]
   - apiGroups: ["*"]
-    resources: [namespaces,configmaps,statefulsets,services]
+    resources: [namespaces,configmaps,statefulsets,services,secrets]
     verbs: [list, watch, create, update, patch, delete]
 
 ---
@@ -49,7 +49,7 @@ rules:
     verbs: [list, watch, patch, create, update, delete]
 
   - apiGroups: ["*"]
-    resources: [namespaces,configmaps,statefulsets,services,pods,events]
+    resources: [namespaces,configmaps,statefulsets,services,pods,events,secrets]
     verbs: [list, watch, create, update, patch, delete]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
