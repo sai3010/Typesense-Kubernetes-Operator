@@ -9,7 +9,7 @@ resource_create_count_success = Counter('tok_resource_create_success_total', 'To
 resource_update_count_success = Counter('tok_resource_update_success_total', 'Total success resource update events by TOK')
 resource_delete_count_success = Counter('tok_resource_delete_success_total', 'Total success resource deletion events by TOK')
 operator_version = Gauge('tok_version_info', 'Information about the operator version', ['version'])
-operator_version.labels(version='2.3').set(2.3)
+operator_version.labels(version='3.0').set(3.0)
 
 app = Flask(__name__)
 
