@@ -1,6 +1,6 @@
-FROM python:3.11.10-slim
+FROM python:3.11.10
 COPY requirements.txt /
-RUN pip install -r requirements.txt --no-cache-dir && rm -Rf /root/.cache/pip
+RUN pip install --upgrade pip && pip install -r requirements.txt --no-cache-dir && rm -Rf /root/.cache/pip
 COPY handler.py deployment_utils.py /
 COPY templates /templates
 
