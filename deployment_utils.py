@@ -42,9 +42,11 @@ def validate_spec(op_spec: dict, k8s_core_v1=None, action=None) -> dict:
             return_data['livenessProbe_periodSeconds'] = spec['livenessProbe']['periodSeconds']
 
         if spec.get('topologySpreadConstraints'):
-            if not spec['topologySpreadConstraints'].get('maxSkew') or not spec['topologySpreadConstraints'].get('topologyKey') or \
-               not spec['topologySpreadConstraints'].get('whenUnsatisfiable') or not spec['topologySpreadConstraints'].get('labelSelector'):
-                return_data['topologySpreadConstraints'] = spec.get('topologySpreadConstraints')
+            for constraints in spec['topologySpreadConstraints']:
+                if not constraints.get('maxSkew') or not constraints.get('topologyKey') or \
+               not constraints.get('whenUnsatisfiable') or not constraints.get('labelSelector'):
+                    raise Exception('Missing topologySpreadConstraints properties. Required: maxSkew, topologyKey, whenUnsatisfiable, labelSelector')
+            return_data['topologySpreadConstraints'] = spec['topologySpreadConstraints']
     
     if config and action!='delete':
         '''
