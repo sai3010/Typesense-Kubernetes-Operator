@@ -22,6 +22,13 @@ spec:
       cpu: "100m"
   nodeSelector:
     kubernetes.io/os: linux
+  # topologySpreadConstraints:
+  #   - labelSelector:
+  #       matchLabels:
+  #         app: typesense
+  #     maxSkew: 1
+  #     topologyKey: kubernetes.io/hostname
+  #     whenUnsatisfiable: DoNotSchedule
   # storageClass:
   #   name: standard
   #   size: "100Mi"

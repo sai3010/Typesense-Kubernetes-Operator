@@ -41,6 +41,13 @@ def validate_spec(op_spec: dict, k8s_core_v1=None, action=None) -> dict:
             return_data['livenessProbe_failureThreshold'] = spec['livenessProbe']['failureThreshold']
             return_data['livenessProbe_periodSeconds'] = spec['livenessProbe']['periodSeconds']
 
+        if spec.get('topologySpreadConstraints'):
+            for constraints in spec['topologySpreadConstraints']:
+                if not constraints.get('maxSkew') or not constraints.get('topologyKey') or \
+               not constraints.get('whenUnsatisfiable') or not constraints.get('labelSelector'):
+                    raise Exception('Missing topologySpreadConstraints properties. Required: maxSkew, topologyKey, whenUnsatisfiable, labelSelector')
+            return_data['topologySpreadConstraints'] = spec['topologySpreadConstraints']
+    
     if config and action!='delete':
         '''
         Get APIKEY from secret
@@ -161,6 +168,9 @@ def deploy_typesense_statefulset(apps_obj: object,spec: dict,update=False) -> No
             configuration['spec']['template']['spec']['containers'][typesense_container_index]['livenessProbe']['failureThreshold'] = spec['livenessProbe_failureThreshold']
             configuration['spec']['template']['spec']['containers'][typesense_container_index]['livenessProbe']['periodSeconds'] = spec['livenessProbe_periodSeconds']
         
+        if spec.get('topologySpreadConstraints'):
+            configuration['spec']['template']['spec']['topologySpreadConstraints'] = spec['topologySpreadConstraints']
+
         for name,value in spec.get('env',{}).items():
             if 'env' not in configuration['spec']['template']['spec']['containers'][typesense_container_index]:
                 configuration['spec']['template']['spec']['containers'][typesense_container_index]['env'] = []
