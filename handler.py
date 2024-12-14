@@ -2,7 +2,7 @@ import kopf
 import logging
 from kubernetes import client, config
 from deployment_utils import validate_spec,deploy_typesense_statefulset,create_modify_namespace,deploy_configmap,deploy_service,cleanup
-from app import resource_create_count_success, resource_delete_count_success, resource_update_count_success
+from routes import resource_create_count_success, resource_delete_count_success, resource_update_count_success
 
 @kopf.on.login()
 def login_fn(**kwargs):
