@@ -1,13 +1,8 @@
 name: TOK Build and Push
 
-# on:
-#   release:
-#     types: [published]
-
 on:
-  push:
-    branches:
-      - feat/actions  # or change to your deployment branch
+  release:
+    types: [published]
 
 jobs:
   build-and-push:
@@ -37,5 +32,4 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64,linux/arm/v7,linux/arm64
-          # tags: sai3010/typesense-operator:${{ github.event.release.tag_name }}
-          tags: sai3010/typesense-operator:0.1
+          tags: sai3010/typesense-operator:${{ github.event.release.tag_name }}
