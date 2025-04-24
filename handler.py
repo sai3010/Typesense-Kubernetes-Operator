@@ -22,6 +22,8 @@ def create_fn(body, **kwargs):
         config.load_kube_config()
     k8s_apps_v1 = client.AppsV1Api()
     k8s_core_v1 = client.CoreV1Api()
+    operator_namespace = body.get('metadata', {}).get('namespace', 'default')
+    kwargs['operator_namespace'] = operator_namespace
     spec = validate_spec(kwargs, k8s_core_v1)
     create_modify_namespace(k8s_core_v1,namespace=spec['namespace'])
     deploy_configmap(k8s_core_v1,replicas=spec['replicas'],namespace=spec['namespace'])

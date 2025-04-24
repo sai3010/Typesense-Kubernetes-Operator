@@ -9,6 +9,7 @@ def validate_spec(op_spec: dict, k8s_core_v1=None, action=None) -> dict:
     '''
     spec = op_spec['new'].get('spec',None)
     config = op_spec['new'].get('config',None)
+    operator_namespace = op_spec.get('operator_namespace')
     return_data = {}
     if spec:
         if spec.get('resources'):
@@ -47,13 +48,12 @@ def validate_spec(op_spec: dict, k8s_core_v1=None, action=None) -> dict:
                not constraints.get('whenUnsatisfiable') or not constraints.get('labelSelector'):
                     raise Exception('Missing topologySpreadConstraints properties. Required: maxSkew, topologyKey, whenUnsatisfiable, labelSelector')
             return_data['topologySpreadConstraints'] = spec['topologySpreadConstraints']
-    
     if config and action!='delete':
         '''
         Get APIKEY from secret
         '''
         secret_name = config.get('secret','typesense-apikey')
-        secret = k8s_core_v1.read_namespaced_secret(name=secret_name,namespace=return_data['namespace'])
+        secret = k8s_core_v1.read_namespaced_secret(name=secret_name,namespace=operator_namespace)
         secret_data = secret.data
         if not secret_data:
             raise Exception("Secret for APIKey not found")
