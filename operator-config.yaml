@@ -6,7 +6,7 @@ metadata:
 spec:
   replicas: 1
   namespace: typesense
-  image: typesense/typesense:27.1
+  image: typesense/typesense:28.0
   env:
   - name: APIKEY
     valueFrom:
@@ -18,7 +18,7 @@ spec:
       memory: 100Mi
       cpu: "100m"
     limits:
-      memory: 200Mi
+      memory: 300Mi
       cpu: "100m"
   nodeSelector:
     kubernetes.io/os: linux
