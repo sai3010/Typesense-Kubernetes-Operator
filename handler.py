@@ -46,6 +46,8 @@ def update_fn(body, **kwargs):
         config.load_kube_config()
     k8s_apps_v1 = client.AppsV1Api()
     k8s_core_v1 = client.CoreV1Api()
+    operator_namespace = body.get('metadata', {}).get('namespace', 'default')
+    kwargs['operator_namespace'] = operator_namespace
     spec = validate_spec(kwargs, k8s_core_v1)
     deploy_configmap(k8s_core_v1,replicas=spec['replicas'],namespace=spec['namespace'],update=True)
     deploy_typesense_statefulset(k8s_apps_v1,spec,update=True)
