@@ -48,6 +48,12 @@ def validate_spec(op_spec: dict, k8s_core_v1=None, action=None) -> dict:
                not constraints.get('whenUnsatisfiable') or not constraints.get('labelSelector'):
                     raise Exception('Missing topologySpreadConstraints properties. Required: maxSkew, topologyKey, whenUnsatisfiable, labelSelector')
             return_data['topologySpreadConstraints'] = spec['topologySpreadConstraints']
+
+        if spec.get('tolerations'):
+            for toleration in spec['tolerations']:
+                if not toleration.get('key') or not toleration.get('operator') or not toleration.get('effect'):
+                    raise Exception('Missing tolerations properties. Required: key, operator, effect')
+            return_data['tolerations'] = spec['tolerations']
     if config and action!='delete':
         '''
         Get APIKEY from secret
@@ -170,6 +176,9 @@ def deploy_typesense_statefulset(apps_obj: object,spec: dict,update=False) -> No
         
         if spec.get('topologySpreadConstraints'):
             configuration['spec']['template']['spec']['topologySpreadConstraints'] = spec['topologySpreadConstraints']
+
+        if spec.get('tolerations'):
+            configuration['spec']['template']['spec']['tolerations'] = spec['tolerations']
 
         for name,value in spec.get('env',{}).items():
             if 'env' not in configuration['spec']['template']['spec']['containers'][typesense_container_index]:
