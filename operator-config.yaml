@@ -40,7 +40,9 @@ spec:
   #  periodSeconds: 10
 config:
   # Name of the secret
-  secret: "typesense-apikey"
+  secret: 
+    name: "typesense-apikey" # defaults to "typesense-apikey" if not specified
+    namespace: "default" # defaults to "default" namespace if not specified
   # Define all environment variables here.
   # NOTE: This will add / override existing env variables defined as default for the operator
   env:

@@ -9,7 +9,6 @@ def validate_spec(op_spec: dict, k8s_core_v1=None, action=None) -> dict:
     '''
     spec = op_spec['new'].get('spec',None)
     config = op_spec['new'].get('config',None)
-    operator_namespace = op_spec.get('operator_namespace')
     return_data = {}
     if spec:
         if spec.get('resources'):
@@ -52,9 +51,12 @@ def validate_spec(op_spec: dict, k8s_core_v1=None, action=None) -> dict:
         '''
         Get APIKEY from secret
         '''
-        secret_name = config.get('secret','typesense-apikey')
-        secret = k8s_core_v1.read_namespaced_secret(name=secret_name,namespace=operator_namespace)
-        secret_data = secret.data
+        secret = config.get('secret',None)
+        if not secret:
+            raise Exception("Typesense secret not found. Please create a secret and pass it in config")
+        secret_name = secret.get('name','typesense-apikey')
+        secret_namespace = secret.get('namespace','default')
+        secret_data = k8s_core_v1.read_namespaced_secret(name=secret_name,namespace=secret_namespace).data
         if not secret_data:
             raise Exception("Secret for APIKey not found")
         # Decode the base64 encoded secret data
