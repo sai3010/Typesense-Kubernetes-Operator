@@ -1,0 +1,28 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: typesenseoperators.typesenseproject.org
+spec:
+  scope: Namespaced
+  group: typesenseproject.org
+  names:
+    kind: TypesenseOperator
+    plural: typesenseoperators
+    singular: typesenseoperator
+    shortNames:
+      - tyop
+      - tyops
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+            config:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true

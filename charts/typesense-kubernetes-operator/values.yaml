@@ -1,0 +1,21 @@
+# Kubernetes namespace to deploy the Typesense operator
+namespace: tok
+
+# Image for the Operator server
+image:
+  pullPolicy: IfNotPresent
+  typesenseImage: sai3010/typesense-operator:3.2
+
+
+# node selector to schedule Pods on specific nodes
+nodeSelector:
+  kubernetes.io/os: linux
+
+# CPU/Memory resource requests and limits
+resources:
+  requests:
+    memory: 200Mi
+    cpu: "200m"
+  limits:
+    memory: 200Mi
+    cpu: "200m"
