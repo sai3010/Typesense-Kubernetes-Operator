@@ -1,53 +1,43 @@
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  namespace: "default"
-  name: typesense-operator-sa
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: typesenseoperator-role-cluster
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: {{ .Release.Name }}
+    meta.helm.sh/release-namespace: {{ .Release.Namespace }}
 rules:
-
-  # Framework: knowing which other operators are running (i.e. peering).
-  
   - apiGroups: [kopf.dev]
     resources: [clusterkopfpeerings]
     verbs: [list, watch, patch, get, create]
-
-  # Application: read-only access for watching cluster-wide.
   - apiGroups: [typesenseproject.org]
     resources: [typesenseoperators]
     verbs: [list, watch, create, update, patch, delete]
-
-  # Framework: runtime observation of namespaces & CRDs (addition/deletion).
   - apiGroups: [apiextensions.k8s.io]
     resources: [customresourcedefinitions]
     verbs: [list, watch]
   - apiGroups: ["*"]
     resources: [namespaces,configmaps,statefulsets,services,secrets]
     verbs: [list, watch, create, update, patch, delete]
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  namespace: "default"
+  namespace: {{ .Values.namespace }}
   name: typesenseoperator-role-namespaced
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: {{ .Release.Name }}
+    meta.helm.sh/release-namespace: {{ .Release.Namespace }}
 rules:
-
-  # Framework: knowing which other operators are running (i.e. peering).
   - apiGroups: [kopf.dev]
     resources: [kopfpeerings]
     verbs: [list, watch, patch, get]
-
-  # Application: watching & handling for the custom resource we declare.
   - apiGroups: [typesenseproject.org]
     resources: [typesenseoperators]
     verbs: [list, watch, patch, create, update, delete]
-
   - apiGroups: ["*"]
     resources: [namespaces,configmaps,statefulsets,services,pods,events,secrets]
     verbs: [list, watch, create, update, patch, delete, get]
@@ -56,6 +46,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: typesenseoperator-crolebinding-cluster
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: {{ .Release.Name }}
+    meta.helm.sh/release-namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -63,13 +58,18 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: typesense-operator-sa
-    namespace: "default"
+    namespace: {{ .Values.namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  namespace: "default"
+  namespace: {{ .Values.namespace }}
   name: typesenseoperator-rolebinding-namespaced
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: {{ .Release.Name }}
+    meta.helm.sh/release-namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -77,3 +77,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: typesense-operator-sa
+    namespace: {{ .Values.namespace }}
