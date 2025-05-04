@@ -6,5 +6,7 @@ Please report an issue for improvement suggestions/feedback. This operator is be
 # Read the Docs
 [TOK docs](https://sai3010.github.io/Typesense-Kubernetes-Operator/)
 
-# License
+# Helm Chart
+The Typesense-Kubernetes-Operator can also be deployed using a Helm chart, which simplifies the installation process. You can find the Helm chart and instructions for usage in the [GitHub repository](https://github.com/sai3010/Typesense-Kubernetes-Operator-Charts/).
+
 Typesense operator is licensed under the [Apache License](./LICENSE)
