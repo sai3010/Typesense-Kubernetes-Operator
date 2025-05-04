@@ -31,7 +31,7 @@ jobs:
       - name: Package Helm Chart with Release Tag
         run: |
           CHART_VERSION=$(echo "${{ github.ref_name }}" | sed -e 's/^helm-//')
-          helm package typesense-kubernetes-operator --version "$CHART_VERSION" --app-version "$CHART_VERSION"
+          helm package charts/typesense-kubernetes-operator --version "$CHART_VERSION" --app-version "$CHART_VERSION"
 
       - name: Push Helm Chart to Docker Hub
         run: |
