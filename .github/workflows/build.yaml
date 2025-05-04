@@ -1,4 +1,4 @@
-name: TOK Build and Push
+name: TKO Build and Push
 
 on:
   release:
