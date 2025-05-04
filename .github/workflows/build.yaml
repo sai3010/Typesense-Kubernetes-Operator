@@ -6,6 +6,7 @@ on:
 
 jobs:
   build-and-push:
+    if: "!startsWith(github.ref_name, 'helm-')"
     runs-on: ubuntu-latest
 
     steps:

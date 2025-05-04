@@ -26,7 +26,7 @@ jobs:
       - name: Set up Helm
         uses: azure/setup-helm@v3
         with:
-          version: '3.x'
+          version: '3.17.3'
 
       - name: Package Helm Chart with Release Tag
         run: |
